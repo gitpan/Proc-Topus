@@ -7,7 +7,7 @@ use Exporter;
 use Socket;
 
 
-our $VERSION = '0.00';
+our $VERSION = '0.01';
 
 our @ISA       = qw( Exporter );
 our @EXPORT_OK = qw( spawn );
@@ -44,6 +44,12 @@ sub spawn {
     my @pairs = map { $_->[_WORKER] } @{ delete $pairs->{$name} };
     delete $pairs->{$_}
       for keys %$pairs;
+
+    if( $config->{setsid} ) {
+      require POSIX;
+      POSIX::setsid()
+        or die 'setsid: ', $!;
+    }
 
     my $loader = $config->{loader};
     $loader->( @pairs )
@@ -282,7 +288,7 @@ Proc::Topus - Spawn worker processes with IPC built-in.
 
 =head1 DESCRIPTION
 
-B<Proc::Topus> spawns one or more worker processes from one or more
+Proc::Topus spawns one or more worker processes from one or more
 worker groups.  Each worker process is pre-allocated a pair of
 filehandles for communicating with the initial master process.  An
 intermediate loader process is also created in order to take
@@ -291,10 +297,10 @@ advantage of copy-on-write mechanisms, if present.
 Workers are arranged in groups so that multiple different types of
 worker processes may be spawned at the same time.  Each group of
 workers can be configured independently of the others to allow for
-maximum flexibility.  This includes configuring the number of workers
-as well as the method in which the IPC filehandles are created and
-whether or not autoflush is enabled.  These options may also be
-set globally for all groups.
+maximum flexibility.  This includes configuring the number of workers,
+the method in which the IPC filehandles are created and whether
+or not autoflush is enabled.  These options may also be set globally
+for all groups.
 
 A double-fork method is used to spawn individual worker processes.
 Initially a process is forked from the master process for each worker
@@ -336,8 +342,8 @@ The return value from this sub-routine is used as the return from
 C<spawn()> in the master process.  This is intended to allow for
 returning an application-specific data structure.
 
-If this option is not present the same structure is returned from
-C<spawn()>.
+If this option is not present the same structure that would normally
+be passed to the call-back is returned from C<spawn()>.
 
 =item C<conduit =E<gt> $conduit>
 
@@ -373,6 +379,12 @@ worker processes are forked.  This can be used to take advantage of
 copy-on-write features or to allocate resources that should be shared
 amongst each worker process.
 
+=item C<setsid =E<gt> $setsid>
+
+This option is a boolean value for controlling whether or not
+C<POSIX::setsid()> is called during the loading phase.  If not
+specified, C<setsid()> will not be called.
+
 =item C<conduit =E<gt> $conduit>
 
 This option specifies the way the IPC filehandles are created for the
@@ -392,7 +404,7 @@ to true.
 
 This option specifies a sub-routine that will be run in the worker
 process once it has been forked.  It is passed two parameters: the
-read filehandle and the writer filehandle.  The return value from
+read filehandle and the write filehandle.  The return value from
 this sub-routine is used as the return from C<spawn()> in the worker
 process.
 

@@ -31,6 +31,7 @@ use Test::More;
         count  => 2,
         loader => sub { $req = 'PING' },
         main   => sub { $res = 'PONG'; [ @_ ] },
+        setsid => 1,
       },
     },
   });

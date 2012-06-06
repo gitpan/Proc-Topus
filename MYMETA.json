@@ -4,7 +4,7 @@
       "jason hord <pravus@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "ExtUtils::MakeMaker version 6.59, CPAN::Meta::Converter version 2.112621",
+   "generated_by" : "ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120630",
    "license" : [
       "mit"
    ],
@@ -23,21 +23,21 @@
       "build" : {
          "requires" : {
             "ExtUtils::MakeMaker" : "6.36",
-            "Test::More" : 0
+            "Test::More" : "0"
          }
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "runtime" : {
          "requires" : {
-            "Exporter" : 0,
-            "Socket" : 0
+            "Exporter" : "0",
+            "Socket" : "0"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.00"
+   "version" : "0.01"
 }
