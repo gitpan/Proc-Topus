@@ -7,7 +7,7 @@ use Exporter;
 use Socket;
 
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 our @ISA       = qw( Exporter );
 our @EXPORT_OK = qw( spawn );
@@ -214,9 +214,11 @@ sub _wait {
 1
 __END__
 
+=pod
+
 =head1 NAME
 
-Proc::Topus - Spawn worker processes with IPC built-in.
+Proc::Topus - Spawn worker processes with IPC built-in
 
 =head1 SYNOPSIS
 
@@ -311,19 +313,15 @@ processes are forked and the loader process exits.
 
 =head1 EXPORTS
 
-=over 2
+=head2 spawn( %args )
 
-=item C<spawn( %args )>
-
-=item C<spawn( \%args )>
+=head2 spawn( \%args )
 
 The C<spawn()> function is the only thing exported from this module. It
 is responsible for performing all of the forking operations.  C<%args>
 may contain the following options:
 
-=over 4
-
-=item C<main =E<gt> sub { ... }>
+=head3 main =E<gt> sub { ... }
 
 This option specifies a sub-routine that will be run in the master
 process once all loaders have completed.  It is passed a single
@@ -345,33 +343,31 @@ returning an application-specific data structure.
 If this option is not present the same structure that would normally
 be passed to the call-back is returned from C<spawn()>.
 
-=item C<conduit =E<gt> $conduit>
+=head3 conduit =E<gt> $conduit
 
 This option specifices the default way the IPC filehandles are created
 for all worker groups.  This can either be C<'socketpair'> or C<'pipe'>.
 If not present it defaults to C<'socketpair'>.
 
-=item C<autoflush =E<gt> $autoflush>
+=head3 autoflush =E<gt> $autoflush
 
 This options is a boolean value for controlling the default autoflush
 behavior for the IPC filehandles for all worker groups.  When true,
 autoflush is turned on.  When false, autoflush is turned off.  If not
 present it defaults to true.
 
-=item C<workers =E<gt> { $name =E<gt> \%config, ... }>
+=head3 workers =E<gt> { $name =E<gt> \%config, ... }
 
 This option specifies the configuration for the worker processes.  This
 option is required.  Workers are grouped by C<$name> and each have their
 own configuration.  C<%config> may contain the following options:
 
-=over 6
-
-=item C<count =E<gt> $count>
+=head4 count =E<gt> $count
 
 This option specifies the number of worker processes that will be
 spawned.  It is required.
 
-=item C<loader =E<gt> sub { ... }>
+=head4 loader =E<gt> sub { ... }
 
 This option specifies a sub-routine that is used as a call-back during
 the loading phase.  This allows resources to be loaded before individual
@@ -379,20 +375,20 @@ worker processes are forked.  This can be used to take advantage of
 copy-on-write features or to allocate resources that should be shared
 amongst each worker process.
 
-=item C<setsid =E<gt> $setsid>
+=head4 setsid =E<gt> $setsid
 
 This option is a boolean value for controlling whether or not
 C<POSIX::setsid()> is called during the loading phase.  If not
 specified, C<setsid()> will not be called.
 
-=item C<conduit =E<gt> $conduit>
+=head4 conduit =E<gt> $conduit
 
 This option specifies the way the IPC filehandles are created for the
 worker group.  This can either be C<'socketpair'> or C<'pipe'>.  If not
 present, the global value will be used.  If no global value is specified
 it defaults to C<'socketpair'>.
 
-=item C<autoflush =E<gt> $autoflush>
+=head4 autoflush =E<gt> $autoflush
 
 This option is a boolean value for controlling the autoflush behavior
 for the IPC filehandles for the worker group.  When true, autoflush is
@@ -400,7 +396,7 @@ turned on.  When false, autoflush is turned off.  If not present, the
 global value will be used.  If no global value is specified it defaults
 to true.
 
-=item C<main =E<gt> sub { ... }>
+=head4 main =E<gt> sub { ... }
 
 This option specifies a sub-routine that will be run in the worker
 process once it has been forked.  It is passed two parameters: the
@@ -412,19 +408,13 @@ If this option is not present the same filehandles are returned from
 C<spawn()> as an C<ARRAY> reference with the read filehandle located
 at index 0 and the write filehandle located at index 1.
 
-=back
-
-=back
-
-=back
-
 =head1 AUTHOR
 
 jason hord E<lt>pravus@cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2012, jason hord
+Copyright (c) 2012-2014, jason hord
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

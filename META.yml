@@ -1,5 +1,5 @@
 ---
-abstract: 'Spawn worker processes with IPC built-in.'
+abstract: 'Spawn worker processes with IPC built-in'
 author:
   - 'jason hord <pravus@cpan.org>'
 build_requires:
@@ -24,4 +24,4 @@ requires:
   Socket: 0
 resources:
   license: http://opensource.org/licenses/mit-license.php
-version: 0.01
+version: 0.02
